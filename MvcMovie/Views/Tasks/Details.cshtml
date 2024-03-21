@@ -1,0 +1,71 @@
+﻿@model MvcTasks.Models.Task
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Task</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Deadline)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Deadline)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+    </dl>
+</div>
+
+<div id="timer">
+    @if(Model.Status != "Done")
+    {
+        <div>
+        Time Until Deadline: @{
+            TimeSpan timeRemaining = Model.Deadline - DateTime.Now;
+            if (timeRemaining.TotalMilliseconds <= 0)
+            {
+                <span style="color:red">
+                @("Overdue")
+                </span>
+            }
+            else
+            {
+                <span style="color:green">
+                @($"{timeRemaining.Days}d {timeRemaining.Hours}h {timeRemaining.Minutes}m {timeRemaining.Seconds}s")
+                </span>
+            }
+        }
+        </div>
+        <div>
+            <form asp-action="EndTimer" asp-route-taskId="@Model.Id" method="post">
+                <button type="submit" class="btn btn-primary">@("Complete Task")</button>
+            </form>
+        </div>
+    }
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
